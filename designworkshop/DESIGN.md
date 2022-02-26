@@ -12,11 +12,16 @@ This bot will be made available through discord, a platform that many are aware 
 
 # Design Sketches
 ## Sequence flow chart
-{post sequence chart here}
+<img width="646" alt="Screen Shot 2022-02-26 at 5 23 29 PM" src="https://user-images.githubusercontent.com/81393135/155861999-17ecb1a0-cd12-4f80-b1dd-3780875f72c7.png">
+
 
 
 ## StoryBoard drawing
-{post story board here}
+![IMG_8963](https://user-images.githubusercontent.com/81393135/155862035-a64b2c22-30a1-497b-a666-07c6ed58e893.jpg)
+
+
+## Wireframe
+<img width="494" alt="Screen Shot 2022-02-26 at 6 12 58 PM" src="https://user-images.githubusercontent.com/81393135/155862001-4585c900-47fc-46ae-9f6e-fa2372e9c39c.png">
 
 # Architecture Design
 

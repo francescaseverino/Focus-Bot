@@ -9,6 +9,37 @@ Our bot makes completing tasks easy and inevitable. Our bot takes the uncertaint
 This bot will be made available through discord, a platform that many are aware of and use on a daily basis. Discord promotes multiparty discussions, to which the bot will be implemented to help organize tasks and projects. This bot should automatically be made aware of a user's current tasks and assignments through third party apis, however any other information such as group members can be introduced to the bot through a chat interface. The bot can pick up on user behavior to delegate tasks in group behaviors and can be modified to suit most user needs through the chat interface.
 
 # Use Cases
+## Use Case 1: Getting a HW alert
+- 1 Preconditions
+  Must have discord bot in server
+	Inputting an assignment and its due date
+- 2 Main Flow
+	User is prompted X amount of time ahead of the due date of the assignment. The user is also prompted x amount of times prior to the submission deadline.
+- 3 Subflow
+	[S1] User opens discord chat (server) 
+  [S2] Bot will prompt user regarding assignment status
+  [S3] Users can choose to interact with bot by updating status of assignment or submitting assignment.
+  [S4]Bot responds with further action that must be taken or with submission complete status
+- 4 Alternative Flows
+ [E1] User has no current assignments 
+
+
+## Use Case 2: Starting a group assignment
+- 1 Preconditions
+	Must have a server with all group members in it
+	Must have the discord bot in the same server
+- 2 Main Flow
+	Group Members input assignment and responsibilities to which the bot organizes and assigns each member their tasks. The bot periodically sends group reminders as well as tagged reminders for each user to encourage progress.
+- 3 Subflow
+	[S1] Group member accessed discord chat
+  [S2] Bot will prompt user regarding assignment progress and any personal tasks that need to be done 
+  [S3] Users can choose to interact with bot by updating status of assignment or submitting assignment.
+  [S4]Bot responds with further action that must be taken or with submission complete status
+- 4 Alternative Flows
+	[E1] Group has no current project 
+  [E2] Group members manually choose tasks
+  [E3] Group member has completed no work and the submission deadline for the assignment is particularly close
+
 
 # Design Sketches
 ## Sequence flow chart

@@ -24,4 +24,5 @@ This bot will be made available through discord, a platform that many are aware 
 <img width="494" alt="Screen Shot 2022-02-26 at 6 12 58 PM" src="https://user-images.githubusercontent.com/81393135/155862001-4585c900-47fc-46ae-9f6e-fa2372e9c39c.png">
 
 # Architecture Design
+<img width="757" alt="Screen Shot 2022-02-27 at 1 40 43 PM" src="https://user-images.githubusercontent.com/81393135/155895320-e6c8cac6-5f63-46a9-a210-64af8033b160.png">
 

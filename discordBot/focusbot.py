@@ -22,9 +22,9 @@ API_KEY = "1030~2u1bDNoJ2yBp0uTJdaYfxleZcagurrg0kUQ62NB71zL3ReUUhkhBVqYYkCfyf7U5
 canvas = Canvas(API_URL,API_KEY)
 
 
-TOKEN = 'OTUzMDQzNDU0MDE4MDkzMDc2.Yi-04g.H2r2e87NSHoId8RnMSvLHPBGuH4'
+TOKEN = 'OTUzMDQzNDU0MDE4MDkzMDc2.Yi-04g.4NG8RXmB3KZ5nJq77ZDdNyyT8mQ'
 
-bot = commands.Bot(command_prefix="-")
+bot = commands.Bot(command_prefix="f-")
 
 @bot.event
 async def on_ready():
@@ -65,9 +65,10 @@ async def update(ctx):
         
             for assignment in assignments:
                 #if not(assignment.due_at is None or assignment.due_at == "null" or current_time > datetime.datetime.strptime(assignment.due_at, r'%Y-%m-%dT%H:%M:%SZ')):
-                result = db.collection("{}".format(ctx.message.author)).document(course.name.replace("/"," ")).collection(assignment.name.replace("/"," ")).document("Due Date")
+                result = db.collection("{}".format(ctx.message.author)).document(course.name.replace("/"," ")).collection(assignment.name.replace("/"," ")).document("fields")
                 if not(result.get().exists):
-                    result.set({"due date":assignment.due_at})
+                    print(assignment.name)
+                    result.set({"due date":assignment.due_at, "URL": assignment.html_url} )
        
         await ctx.send("done")
 

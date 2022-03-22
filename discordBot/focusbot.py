@@ -11,7 +11,7 @@ from firebase_admin import firestore
 import datetime
 import asyncio
 
-cred = credentials.Certificate("serviceAccountKey.json")
+cred = credentials.Certificate("discordBot/serviceAccountKey.json")
 firebase_admin.initialize_app(cred)
 
 db = firestore.client()
@@ -47,9 +47,7 @@ async def on_message(message):
             await message.channel.send(response)
             return"""
 
-
-
-
+# update
 @bot.command()
 async def update(ctx):
         courses = canvas.get_courses(enrollment_state="active")
@@ -75,7 +73,9 @@ async def update(ctx):
                     
        
         await ctx.send("done")
-        
+
+
+# get assignment - pull all assignments due in a week
 @bot.command()
 async def get_assignment(ctx):
 
@@ -107,6 +107,8 @@ async def get_assignment(ctx):
     await ctx.send("done")
 
 
+
+# get all assignments due in the set range
 @bot.command()
 async def get_All_assignment(ctx):
 
@@ -132,6 +134,8 @@ async def get_All_assignment(ctx):
     await ctx.send("done")
 
 
+
+# clear - clear out all assignments
 @bot.command()
 async def clear(ctx):
     def check(msg):
@@ -160,6 +164,9 @@ async def clear(ctx):
         course.reference.delete()
     await ctx.send("done")
 
+
+
+# get assignments for a specific course 
 @bot.command()
 async def get_course_assignment(ctx):
     def check(msg,ctx,sz):
@@ -201,8 +208,12 @@ async def get_course_assignment(ctx):
 
     await ctx.send("done") 
 
+
+
+
+# set assignment time range
 @bot.command()
-async def set_remind_time(ctx):
+async def set_getAssignmentRange(ctx):
     
     def check(msg,ctx):
         return msg.author == ctx.author and msg.channel == ctx.channel and int(msg.content) > 0 and int(msg.content) < 365

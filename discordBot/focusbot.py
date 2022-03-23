@@ -1,6 +1,7 @@
 
 from tkinter.tix import INTEGER
 from config import TOKEN
+from config import canvasToken
 from heapq import merge
 import discord
 from discord.ext import commands
@@ -11,7 +12,7 @@ from firebase_admin import firestore
 import datetime
 import asyncio
 
-cred = credentials.Certificate("discordBot/serviceAccountKey.json")
+cred = credentials.Certificate("serviceAccountKey.json")
 firebase_admin.initialize_app(cred)
 
 db = firestore.client()
@@ -19,7 +20,7 @@ db = firestore.client()
 # Canvas API URL
 API_URL = "https://sit.instructure.com/"
 # Canvas API key
-API_KEY = "token"
+API_KEY = canvasToken
 
 canvas = Canvas(API_URL,API_KEY)
 
@@ -30,23 +31,6 @@ async def on_ready():
     print('we have logged in as {0.user}'.format(bot))
 
 
-"""@bot.event
-async def on_message(message):
-    username = str(message.author).split('#')[0]
-    user_message = str(message.content)
-    channel = str(message.channel.name)
-    print(f'{username}: {user_message} ({channel})')
-
-    #bot does not answer it self
-    if message.author == bot.user:
-        return
-
-    if message.channel.name == 'general':
-        if user_message.lower() == "hello":
-            response = f'hi'
-            await message.channel.send(response)
-            return"""
-
 # update
 @bot.command()
 async def update(ctx):
@@ -54,14 +38,13 @@ async def update(ctx):
 
         for course in courses:
             assignments = course.get_assignments()
-           
-            cs = db.collection("courses").document(course.name.replace("/"," "))
+
+            cs = db.collection("{}".format(ctx.author)).document("courses").collection("courseName").document(course.name.replace("/"," "))
             if not(cs.get().exists):
                 cs.set({course.name: True})
-        
+
             for assignment in assignments:
-                #if not(assignment.due_at is None or assignment.due_at == "null" or current_time > datetime.datetime.strptime(assignment.due_at, r'%Y-%m-%dT%H:%M:%SZ')):
-                result = db.collection(course.name.replace("/"," ")).document(assignment.name.replace("/"," "))
+                result = db.collection("{}".format(ctx.author)).document("courses").collection(course.name.replace("/"," ")).document(assignment.name.replace("/"," "))
                 if not(result.get().exists):
                     if assignment.due_at == None:
                         result.set({u"noDueDate":True, u"URL": assignment.html_url, u"Submissions": assignment.has_submitted_submissions} )
@@ -69,7 +52,7 @@ async def update(ctx):
                         dt = datetime.datetime.strptime(assignment.due_at, r'%Y-%m-%dT%H:%M:%SZ')
                         result.set({u"dueDate":dt, u"URL": assignment.html_url, u"Submissions": assignment.has_submitted_submissions} )
         
-        db.collection("days").document("day").set({u"setDay": 7})
+        db.collection("{}".format(ctx.author)).document("day").set({u"setDay": 7})
                     
        
         await ctx.send("done")
@@ -79,45 +62,17 @@ async def update(ctx):
 @bot.command()
 async def get_assignment(ctx):
 
-    courses = db.collection("courses").stream()
+    courses = db.collection("{}".format(ctx.author)).document("courses").collection("courseName").stream()
   
     for course in courses:
         embed=discord.Embed(title=course.id,inline=False)
         cnt = 1
-        n= datetime.datetime.now()
+        now= datetime.datetime.now()
         
-        if not(course.id == "courses" or course.id == "days"):
-            day = db.collection("days").document("day").get()
-            day = day.to_dict()
-            day = day["setDay"]
-            docs = db.collection(course.id).where(u"dueDate", u">", n).where(u"dueDate", u"<", n+datetime.timedelta(days=day)).stream()
-            
-            for doc in docs:
-                if cnt == 24:
-                    await ctx.send(embed = embed)
-                    embed=discord.Embed(title="Continued",inline=False)
-                    cnt = 0
-                x = doc.to_dict()
-            
-                embed.add_field(name = doc.id,value = x["dueDate"],inline= False)
-                cnt += 1
-            
-            await ctx.send(embed = embed)   
-    
-    await ctx.send("done")
-
-
-
-# get all assignments due in the set range
-@bot.command()
-async def get_All_assignment(ctx):
-
-    courses = db.collection("courses").stream()
-  
-    for course in courses:
-        embed=discord.Embed(title=course.id,inline=False)
-        cnt = 1
-        docs = db.collection(course.id).stream()
+        day = db.collection("{}".format(ctx.author)).document("day").get()
+        day = day.to_dict()
+        day = day["setDay"]
+        docs = db.collection("{}".format(ctx.author)).document("courses").collection(course.id).where(u"dueDate", u">", now).where(u"dueDate", u"<", now+datetime.timedelta(days=day)).stream()
         
         for doc in docs:
             if cnt == 24:
@@ -127,6 +82,42 @@ async def get_All_assignment(ctx):
             x = doc.to_dict()
         
             embed.add_field(name = doc.id,value = x["dueDate"],inline= False)
+            if x["Submissions"] == True:
+                embed.add_field(name = doc.id + " has been submitted",value = "url: "+ x["URL"],inline= False)
+            else:
+                embed.add_field(name = doc.id + " has not been submitted",value = "url: "+ x["URL"],inline= False)
+            cnt += 1
+        
+        await ctx.send(embed = embed)   
+    
+    await ctx.send("done")
+
+
+
+# get all assignments due in the set range
+@bot.command()
+async def get_All_assignment(ctx):
+
+    courses = db.collection("{}".format(ctx.author)).document("courses").collection("courseName").stream()
+  
+    for course in courses:
+        embed=discord.Embed(title=course.id,inline=False)
+        cnt = 1
+        docs = db.collection("{}".format(ctx.author)).document("courses").collection(course.id).stream()
+        
+        for doc in docs:
+            if cnt == 23:
+                await ctx.send(embed = embed)
+                embed=discord.Embed(title="Continued",inline=False)
+                cnt = 0
+            x = doc.to_dict()
+            if "dueDate" in x:
+                embed.add_field(name = doc.id,value = x["dueDate"],inline= False)
+                cnt += 1
+            if x["Submissions"] == True:
+                embed.add_field(name = doc.id + " has been submitted",value = "url: "+ x["URL"],inline= False)
+            else:
+                embed.add_field(name = doc.id + " has not been submitted",value = "url: "+ x["URL"],inline= False)
             cnt += 1
            
         await ctx.send(embed = embed)   
@@ -152,16 +143,21 @@ async def clear(ctx):
     if msg.content.lower() == "n":
         await ctx.send("clear was aborted")
         return
-    courses = db.collection("courses").stream()
-  
+    courses = db.collection("{}".format(ctx.author)).document("courses").collection("courseName").stream()
+    
     for course in courses:
-        
-        docs = db.collection(course.id).stream()
+        docs = db.collection("{}".format(ctx.author)).document("courses").collection(course.id).stream()
         
         for doc in docs:
             doc.reference.delete()
-            
+        
         course.reference.delete()
+        
+    datas = db.collection("{}".format(ctx.author)).stream()
+
+    for data in datas:
+        data.reference.delete()
+
     await ctx.send("done")
 
 
@@ -173,7 +169,7 @@ async def get_course_assignment(ctx):
         return msg.author == ctx.author and msg.channel == ctx.channel and int(msg.content) > 0 and int(msg.content) < sz
 
     lst = []
-    courses = db.collection("courses").stream()
+    courses = db.collection("{}".format(ctx.author)).document("courses").collection("courseName").stream()
 
     embed=discord.Embed(title="Please select which course to see assignments from(enter a number >= 1)",inline=False)
     arycnt = 1
@@ -193,8 +189,11 @@ async def get_course_assignment(ctx):
     embed=discord.Embed(title=lst[msg],inline=False)
     
     cnt = 1
-    n= datetime.datetime.now()
-    docs = db.collection(lst[msg]).where(u"dueDate", u">", n).where(u"dueDate", u"<", n+datetime.timedelta(days=7)).stream()
+    now= datetime.datetime.now()
+    day = db.collection("{}".format(ctx.author)).document("day").get()
+    day = day.to_dict()
+    day = day["setDay"]
+    docs = db.collection("{}".format(ctx.author)).document("courses").collection(lst[msg]).where(u"dueDate", u">", now).where(u"dueDate", u"<", now+datetime.timedelta(days=day)).stream()
     for doc in docs:
         if cnt == 24:
             await ctx.send(embed = embed)
@@ -227,7 +226,7 @@ async def set_getAssignmentRange(ctx):
         
     msg = int(msg.content)
 
-    db.collection("days").document("day").set({u"setDay": msg})
+    db.collection("{}".format(ctx.author)).document("day").set({u"setDay": msg})
 
     await ctx.send("done") 
 

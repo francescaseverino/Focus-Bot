@@ -12,7 +12,7 @@ from firebase_admin import firestore
 import datetime
 import asyncio
 
-cred = credentials.Certificate("serviceAccountKey.json")
+cred = credentials.Certificate("discordBot/serviceAccountKey.json")
 firebase_admin.initialize_app(cred)
 
 db = firestore.client()

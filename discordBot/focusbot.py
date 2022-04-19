@@ -15,6 +15,7 @@ import asyncio
 cred = credentials.Certificate("serviceAccountKey.json")
 firebase_admin.initialize_app(cred)
 
+#use db for firestore ref
 db = firestore.client()
 
 # Canvas API URL
@@ -26,6 +27,7 @@ canvas = Canvas(API_URL,API_KEY)
 
 bot = commands.Bot(command_prefix="f-")
 
+#when bot turns online/load shows on console
 @bot.event
 async def on_ready():
     print('we have logged in as {0.user}'.format(bot))
@@ -34,8 +36,10 @@ async def on_ready():
 # update
 @bot.command()
 async def update(ctx):
+        #get courses that are active from canvas
         courses = canvas.get_courses(enrollment_state="active")
 
+        #for every courses that is active, write its assignment to firebase
         for course in courses:
             assignments = course.get_assignments()
 
@@ -58,12 +62,13 @@ async def update(ctx):
         await ctx.send("done")
 
 
-# get assignment - pull all assignments due in a week
+# get assignment - pull all assignments due in a certain time
 @bot.command()
 async def get_assignment(ctx):
 
     courses = db.collection("{}".format(ctx.author)).document("courses").collection("courseName").stream()
   
+    #takes courses in firebase and search though for assignments
     for course in courses:
         embed=discord.Embed(title=course.id,inline=False)
         cnt = 1

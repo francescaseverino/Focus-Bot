@@ -33,16 +33,18 @@ async def on_ready():
 
 # update
 @bot.command()
+
 async def update(ctx):
+        '''what is ctx?'''
         courses = canvas.get_courses(enrollment_state="active")
 
         for course in courses:
             assignments = course.get_assignments()
-
+            '''what does the following if statement do?'''
             cs = db.collection("{}".format(ctx.author)).document("courses").collection("courseName").document(course.name.replace("/"," "))
             if not(cs.get().exists):
                 cs.set({course.name: True})
-
+            '''what does this for loop do?'''
             for assignment in assignments:
                 result = db.collection("{}".format(ctx.author)).document("courses").collection(course.name.replace("/"," ")).document(assignment.name.replace("/"," "))
                 if not(result.get().exists):
@@ -73,7 +75,7 @@ async def get_assignment(ctx):
         day = day.to_dict()
         day = day["setDay"]
         docs = db.collection("{}".format(ctx.author)).document("courses").collection(course.id).where(u"dueDate", u">", now).where(u"dueDate", u"<", now+datetime.timedelta(days=day)).stream()
-        
+        '''what is this for loop doing?'''
         for doc in docs:
             if cnt == 24:
                 await ctx.send(embed = embed)
@@ -82,6 +84,7 @@ async def get_assignment(ctx):
             x = doc.to_dict()
         
             embed.add_field(name = doc.id,value = x["dueDate"],inline= False)
+            '''can you define the purpose of this if statement and conditions?'''
             if x["Submissions"] == True:
                 embed.add_field(name = doc.id + " has been submitted",value = "url: "+ x["URL"],inline= False)
             else:
@@ -166,6 +169,7 @@ async def clear(ctx):
 @bot.command()
 async def get_course_assignment(ctx):
     def check(msg,ctx,sz):
+        '''what is sz?'''
         return msg.author == ctx.author and msg.channel == ctx.channel and int(msg.content) > 0 and int(msg.content) < sz
 
     lst = []

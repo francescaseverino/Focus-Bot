@@ -11,8 +11,12 @@ This bot will be made available through discord, a platform that many are aware 
 - In order to execute the bot code, the developer must have access to the accountServiceKey.json for this project. Otherwise, the code can be run using a personal accountServiceKey which holds the private key provided by Google Services for a firebase project. This information can be input in a new .json file (with ‘serviceAccountKey’ as a prefix) which should automatically integrate with the bot code and file.
 3. Discord Account	
 - The developer must also have access to a Discord account to which they can provide a service key for a discord account for the bot to run in.
-4. npm install
-- running this command prior to running the code will ensures that all the dependencies needed will be downloaded on the local environment.
+4. pip install
+- must run: 
+  - pip install firebase-admin 
+  - pip install canvasapi 
+  - pip install discord 
+  -running these commands ensures that all the dependencies needed will be downloaded on the local environment.
 5. Running in local environment  
 - developers should be able to click 'run' to run the code locally so that the bot can function in a discord chat online.
 ### For Users:

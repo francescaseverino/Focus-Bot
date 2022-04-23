@@ -35,16 +35,16 @@ async def on_ready():
 @bot.command()
 
 async def update(ctx):
-        '''what is ctx?'''
+        '''ctx is short for context which is the user who sent the command'''
         courses = canvas.get_courses(enrollment_state="active")
 
         for course in courses:
             assignments = course.get_assignments()
-            '''what does the following if statement do?'''
+            '''cs is reference to the course from canvas'''
             cs = db.collection("{}".format(ctx.author)).document("courses").collection("courseName").document(course.name.replace("/"," "))
             if not(cs.get().exists):
                 cs.set({course.name: True})
-            '''what does this for loop do?'''
+            '''loops though all assignments from canvas and input to firestore'''
             for assignment in assignments:
                 result = db.collection("{}".format(ctx.author)).document("courses").collection(course.name.replace("/"," ")).document(assignment.name.replace("/"," "))
                 if not(result.get().exists):
@@ -75,7 +75,7 @@ async def get_assignment(ctx):
         day = day.to_dict()
         day = day["setDay"]
         docs = db.collection("{}".format(ctx.author)).document("courses").collection(course.id).where(u"dueDate", u">", now).where(u"dueDate", u"<", now+datetime.timedelta(days=day)).stream()
-        '''what is this for loop doing?'''
+        '''for every assignment print all assignment'''
         for doc in docs:
             if cnt == 24:
                 await ctx.send(embed = embed)
@@ -84,7 +84,7 @@ async def get_assignment(ctx):
             x = doc.to_dict()
         
             embed.add_field(name = doc.id,value = x["dueDate"],inline= False)
-            '''can you define the purpose of this if statement and conditions?'''
+            '''if assignment was submited or not'''
             if x["Submissions"] == True:
                 embed.add_field(name = doc.id + " has been submitted",value = "url: "+ x["URL"],inline= False)
             else:

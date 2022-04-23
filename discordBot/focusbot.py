@@ -55,7 +55,7 @@ async def update(ctx):
         db.collection("{}".format(ctx.author)).document("day").set({u"setDay": 7})
                     
        
-        await ctx.send("done")
+        await ctx.send("courses and assignments are updated")
 
 
 # get assignment - pull all assignments due in a week
@@ -122,7 +122,7 @@ async def get_All_assignment(ctx):
            
         await ctx.send(embed = embed)   
     
-    await ctx.send("done")
+    await ctx.send("these are all your assignments. try running 'f-update' if you think something is missing")
 
 
 
@@ -141,7 +141,7 @@ async def clear(ctx):
         msg = await bot.wait_for("message")
 
     if msg.content.lower() == "n":
-        await ctx.send("clear was aborted")
+        await ctx.send("the clear request was canceled")
         return
     courses = db.collection("{}".format(ctx.author)).document("courses").collection("courseName").stream()
     
@@ -158,7 +158,7 @@ async def clear(ctx):
     for data in datas:
         data.reference.delete()
 
-    await ctx.send("done")
+    await ctx.send("your data was cleared")
 
 
 
@@ -171,7 +171,7 @@ async def get_course_assignment(ctx):
     lst = []
     courses = db.collection("{}".format(ctx.author)).document("courses").collection("courseName").stream()
 
-    embed=discord.Embed(title="Please select which course to see assignments from(enter a number >= 1)",inline=False)
+    embed=discord.Embed(title="which course would you like to see assignments from? (you can just enter the course number)",inline=False)
     arycnt = 1
     for course in courses:
         embed.add_field(name = course.id,value = arycnt,inline= False)
@@ -182,7 +182,7 @@ async def get_course_assignment(ctx):
 
     msg = await bot.wait_for("message")
     while not(check(msg,ctx,arycnt)):
-        await ctx.send(f"please input a number greater than 0 and less than "+ arycnt)
+        await ctx.send(f"please pick a number greater than 0 and less than "+ arycnt)
         msg = await bot.wait_for("message")
         
     msg = int(msg.content)-1
@@ -205,7 +205,7 @@ async def get_course_assignment(ctx):
            
     await ctx.send(embed = embed) 
 
-    await ctx.send("done") 
+    await ctx.send("here are the assignments for your selected course") 
 
 
 
@@ -228,7 +228,7 @@ async def set_getAssignmentRange(ctx):
 
     db.collection("{}".format(ctx.author)).document("day").set({u"setDay": msg})
 
-    await ctx.send("done") 
+    await ctx.send("you will now only see assignments open for the next "+ msg +" days!") 
 
 
 

@@ -30,5 +30,5 @@ This bot will be made available through discord, a platform that many are aware 
 - clear - clear all assignments in database
 - get_course_assignment - show assignments due in set range(default 7days) from a course chosen by user 
 - set_getAssignmentRange - set the range to show assignments in days(default 7)
-- add assignment -
+- set_Assignment - users can add assignments to existing courses or non existing courses
 - set timer-

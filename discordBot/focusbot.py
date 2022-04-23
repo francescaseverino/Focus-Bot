@@ -232,15 +232,62 @@ async def set_getAssignmentRange(ctx):
 # add assignments not in canvas
 @bot.command()
 async def set_Assignment(ctx):
-    embed=discord.Embed(title="is this class related to one of your canvas courses?",inline=False)
-    await ctx.send(embed = embed)
-    msg = await bot.wait_for("message")
-    embed=discord.Embed(title="what should we call this assignment?",inline=False)
-    await ctx.send(embed = embed)
-    msg = await bot.wait_for("message")
-    embed=discord.Embed(title="when is this assignment due?",inline=False)
-    await ctx.send(embed = embed)
-    msg = await bot.wait_for("message")
+    def check(message,context,sz):
+        return message.author == context.author and message.channel == context.channel and int(message.content) > 0 and int(message.content) < sz
+
+    courseList = []
+    courses = db.collection("{}".format(ctx.author)).document("courses").collection("courseName").stream()
+    embed=discord.Embed(title="is this assignment related to one of your canvas courses?",inline=False)
+    await context.send(embed = embed)
+    message = await bot.wait_for("message")
+    '''adding assignment to current course'''
+    if message.content.lower() == "y" or "yes":
+        data={}
+        assignmentName=""
+        embed=discord.Embed(title="which course?",inline=False)
+        courseID = 1
+        '''creates course list for user to pick from '''
+        for course in courses:
+            embed.add_field(name = course.id,value = courseID,inline= False)
+            courseList.append(course.id)
+            courseID+=1
+        await context.send(embed = embed) 
+        message = await bot.wait_for("message")
+        '''checking if user selection is contained in given list'''
+        while not(check(message,context,courseID)):
+            await context.send(f"try picking a number from the list! (1 to " + courseID +")")
+            message = await bot.wait_for("message")
+        '''setting course'''
+        courseSelection=int(message.content)-1
+        '''setting assignment name'''
+        embed=discord.Embed(title="what should we call this assignment?",inline=False)
+        await context.send(embed = embed)
+        assignmentName=await bot.wait_for("message")
+        ''' setting due date and submission status'''
+        embed=discord.Embed(title="what is the due date? (click enter if you do not have one)",inline=False)
+        await context.send(embed = embed)
+        message = await bot.wait_for("message")
+        data+={u'dueDate':u'message'}
+        data+={u'Submissions': u'false'}
+        db.collection("{}".format(ctx.author)).document("courses").collection(courseList[courseSelection]).document(u'assignmentName').set(data)
+        await contex.send("assignment added :)")
+        return
+    '''adding assignment to course labeled 'other' for miscellaneous assignments'''
+    if message.content.lower() == "n":
+        embed=discord.Embed(title="what should we call this assignment?",inline=False)
+        await context.send(embed = embed)
+        assignmentName= await bot.wait_for("message")
+        ''' setting due date and submission status'''
+        embed=discord.Embed(title="what is the due date? (click enter if you do not have one)",inline=False)
+        await context.send(embed = embed)
+        message = await bot.wait_for("message")
+        data+={u'dueDate':u'message'}
+        data+={u'Submissions': u'false'}
+        db.collection("{}".format(ctx.author)).document("courses").collection(u'other').document(u'assignmentName').set(data)
+        await contex.send("assignment added :) *this one will be listed in 'other'*")
+        return
+    
+    
 
 
 

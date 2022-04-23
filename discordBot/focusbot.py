@@ -229,6 +229,18 @@ async def set_getAssignmentRange(ctx):
     db.collection("{}".format(ctx.author)).document("day").set({u"setDay": msg})
 
     await ctx.send("done") 
+# add assignments not in canvas
+@bot.command()
+async def set_Assignment(ctx):
+    embed=discord.Embed(title="is this class related to one of your canvas courses?",inline=False)
+    await ctx.send(embed = embed)
+    msg = await bot.wait_for("message")
+    embed=discord.Embed(title="what should we call this assignment?",inline=False)
+    await ctx.send(embed = embed)
+    msg = await bot.wait_for("message")
+    embed=discord.Embed(title="when is this assignment due?",inline=False)
+    await ctx.send(embed = embed)
+    msg = await bot.wait_for("message")
 
 
 

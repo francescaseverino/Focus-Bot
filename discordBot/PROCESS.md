@@ -27,5 +27,5 @@
 ## Scrum Meeting Notes
  - link to google doc here
 
-
+https://docs.google.com/document/d/14wscVQ5uXFCzoFL5iHcA-TcvIsUCd2zGR6biHmScvlU/edit
 

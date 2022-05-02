@@ -1,4 +1,5 @@
 
+from asyncio import tasks
 from tkinter.tix import INTEGER
 from config import TOKEN
 from config import canvasToken
@@ -9,6 +10,7 @@ from canvasapi import Canvas
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore
+from datetime import datetime, timedelta
 import datetime
 import asyncio
 
@@ -181,7 +183,6 @@ async def clear(ctx):
 @bot.command()
 async def get_course_assignment(ctx):
     def check(msg,ctx,sz):
-        '''what is sz?'''
         return msg.author == ctx.author and msg.channel == ctx.channel and int(msg.content) > 0 and int(msg.content) < sz
 
     lst = []
@@ -323,7 +324,84 @@ async def set_Assignment(ctx):
         return
     
     
+@bot.command()
+async def remind(ctx):
+    def check(msg,ctx,sz):
+        return msg.author == ctx.author and msg.channel == ctx.channel and int(msg.content) > 0 and int(msg.content) < sz
+
+    lst = []
+    courses = db.collection("{}".format(ctx.author)).document("courses").collection("courseName").stream()
+
+    embed=discord.Embed(title="These are assignments set to be reminded",inline=False)
+    arycnt = 1
+
+    for course in courses:
+        embed=discord.Embed(title=course.id,inline=False)
+        cnt = 1
+        now= datetime.datetime.now()
+        
+        day = db.collection("{}".format(ctx.author)).document("day").get()
+        day = day.to_dict()
+        day = day["setDay"]
+        docs = db.collection("{}".format(ctx.author)).document("courses").collection(course.id).where(u"dueDate", u">", now).where(u"dueDate", u"<", now + datetime.timedelta(days=day)).stream()
+        '''for every assignment print all assignment'''
+        for doc in docs:
+            if cnt == 24:
+                await ctx.send(embed = embed)
+                embed=discord.Embed(title="Continued",inline=False)
+                cnt = 0
+            x = doc.to_dict()
+        
+            if "dueDate" in x:
+                embed.add_field(name = doc.id,value = datetime.datetime.fromtimestamp(x["dueDate"].timestamp()),inline= False)
+                '''if assignment was submited or not'''
+                if x["Submissions"] == False:
+                    
+                    when = datetime.datetime.fromtimestamp(x["dueDate"].timestamp()) - datetime.timedelta(days=1)
+                    
+                    if now < when:
+                        cs = db.collection("{}".format(ctx.author)).document("reminds").collection("remindName").document(doc.id)
+                        if not(cs.get().exists):
+                            cs.set({doc.id: True})
+                        cs = db.collection("{}".format(ctx.author)).document("reminds").collection(doc.id).document(doc.id)
+                        
+                    if "URL" in x:
+                        cs.set({'user_id': ctx.author.id, 'channel_id': ctx.channel.id, 'next_time': when, 'name': doc.id,"URL": x["URL"],'done': False})
+                        embed.add_field(name = doc.id + " has not been submitted",value = "url: "+ x["URL"],inline= False)
+                    else:
+                        cs.set({'user_id': ctx.author.id, 'channel_id': ctx.channel.id, 'next_time': when, 'name': doc.id,'done': False})
+                        embed.add_field(name = doc.id + " has not been submitted",value = "no url",inline= False)
+                cnt += 1
+        
+        await ctx.send(embed = embed) 
+
+    # msg = await bot.wait_for("message")
+    # while not(check(msg,ctx,arycnt)):
+    #     await ctx.send(f"please input a number greater than 0 and less than "+ arycnt)
+    #     msg = await bot.wait_for("message")
+        
+    # msg = int(msg.content)-1
+    # embed=discord.Embed(title=lst[msg],inline=False)
+    
+    # cnt = 1
+    # now= datetime.datetime.now()
+    # day = db.collection("{}".format(ctx.author)).document("day").get()
+    # day = day.to_dict()
+    # day = day["setDay"]
+    # docs = db.collection("{}".format(ctx.author)).document("courses").collection(lst[msg]).where(u"dueDate", u">", now).where(u"dueDate", u"<", now+datetime.timedelta(days=day)).stream()
+    # for doc in docs:
+    #     if cnt == 24:
+    #         await ctx.send(embed = embed)
+    #         embed=discord.Embed(title="Continued",inline=False)
+    #         cnt = 0
+    #     x = doc.to_dict()
+    #     embed.add_field(name = doc.id,value = x["dueDate"],inline= False)
+    #     cnt += 1
+           
+    # await ctx.send(embed = embed) 
+
+    await ctx.send("done") 
 
 
-
+    
 bot.run(TOKEN,bot=True)

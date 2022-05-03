@@ -12,20 +12,35 @@ Using this bot solves the problem of not knowing what to do and when to do it, f
 
 ## Primary Features
 - update - this command prompts the bot to update the database (sourced by google’s firestore console) with canvas assignments and courses. This update also includes manually input assignments not related to canvas assignments.
+
 ***Insert pic of update function***
+
 - get_assignment- this command prompts the bot to show all assignments due in the set time range (the default is set to seven days). The assignments listed are limited to a single course, chosen by the user. If the ‘other’ labeled course is chosen, assignments manually input and not related to canvas assignments will be listed.
+
 ***Insert pic of get assignment function***
+
 - get_All_assignment -  this command prompts the bot to show all assignments due in the set time range (the default is set to seven days). The assignments listed also include assignments manually input and not related to canvas assignments. Only uncompleted assignments along with their due date, title, and related course will be shown.
+
 ***Insert pic of get all assignment function***
+
 - clear - this command prompts the bot to clear all assignments stored in the firestore console, including manually input assignments. This would be useful during course changes or a new semester, for example.
+
 ***Insert pic of clear function***
+
 - get_course_assignment - show assignments due in set range(default 7days) from a course chosen by user
+
 ***Insert pic of get course assignment function***
+
 - set_getAssignmentRange - this command sets a range for the bot to report assignments. The range is from one day to 365 days, and once set, the bot will only provide assignments within that range.
+
 ***Insert pic of set assignment range function***
+
 - set_Assignment - this command lets users inform the bot of assignments not listed in the users’ canvas courses. The bot will store the assignment in the firestore console alongside the stored canvas assignments and will report on user requests. Users also have the option to add assignments to existing canvas courses.
+
 ***Insert pic of set assignment function***
+
 - set timer-
+
 ***Insert pic of timer function***
 
 

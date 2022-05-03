@@ -24,11 +24,14 @@ This bot will be made available through discord, a platform that many are aware 
 ### For Users:
 - bot command = “f-”
 #### Bot Commands
-- update - update the database with canvas assignments and courses
-- get_assignment- show all assignments due in the set range(default 7days)
-- get_All_assignment - show all assignments
-- clear - clear all assignments in database
-- get_course_assignment - show assignments due in set range(default 7days) from a course chosen by user 
-- set_getAssignmentRange - set the range to show assignments in days(default 7)
-- set_Assignment - users can add assignments to existing courses or non existing courses
-- set timer-
+
+- **_clear_**   : Clears out all assignments + reupdates in database
+- **_get_assignment_**   : List of all assignments due in set range (default 7 days)
+- **_get_course_assignment_**   : Get assignment for a specific course
+- **_help_**   : Shows list of commands
+- **_remind_**   : Reminders for assignments in canvas
+- **_set_assignment_**   : Add an assignment not on canvas
+- **_set_assignmentRange_**   : Sets time range for retreiving assignments (default 7 days)
+- **_set_reminder_**   : Adding reminder to a current assignment
+- **_update_**   : Updates the list of assignments to databases (both canvas and manual assignemnts)
+- **_view_reminders_**   : View list of current reminders

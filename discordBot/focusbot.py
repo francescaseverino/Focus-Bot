@@ -322,11 +322,11 @@ async def set_assignment(ctx):
         await ctx.send(embed = embed)
         message = await bot.wait_for("message")
         dt = datetime.datetime.strptime(message.content, r'%m/%d/%Y %H:%M')
-        data.update({u'dueDate':dt})
+        data.update({u'dueDate':dt.astimezone(pytz.UTC)})
         data.update({u'Submissions': False})
         db.collection("{}".format(ctx.author)).document("courses").collection(courseList[courseSelection]).document(assignmentName.content).set(data)
         await ctx.send("Assignment added! :)")
-        return
+        
     
     
     '''adding assignment to course labeled 'other' for miscellaneous assignments'''
@@ -348,7 +348,7 @@ async def set_assignment(ctx):
         db.collection("{}".format(ctx.author)).document("courses").collection(u'other').document(assignmentName.content).set(data)
         db.collection("{}".format(ctx.author)).document("courses").collection(u'courseName').document(u"other").set({u'other': True})
         await ctx.send("Assignment added! :) *this one will be listed in 'other'*")
-        return
+        
     
 
 @bot.command()

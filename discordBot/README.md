@@ -26,6 +26,7 @@ This bot will be made available through discord, a platform that many are aware 
 #### Bot Commands
 
 - **_clear_**   : Clears out all assignments + reupdates in database
+- **_delete_reminders_**   : Deletes current reminders
 - **_get_assignment_**   : List of all assignments due in set range (default 7 days)
 - **_get_course_assignment_**   : Get assignment for a specific course
 - **_help_**   : Shows list of commands

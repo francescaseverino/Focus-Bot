@@ -494,7 +494,25 @@ async def reminder():
                 refName = db.collection(user.id).document(u"reminds").collection(u"remindName").document(doc.id).get()
                 refName.reference.delete()
                 await channel.send(embed = embed)
+
+
+@bot.command()
+async def delete_reminders(ctx):
+    docs = db.collection("{}".format(ctx.author)).document(u"reminds").collection(u"remindName").stream()
+    for doc in docs:
+        ref = db.collection("{}".format(ctx.author)).document(u"reminds").collection(doc.id).document(doc.id).get()
+        x = ref.to_dict()
+        embed=discord.Embed(title=x["name"] ,inline=False)
+        if "URL" in x:
+            embed.add_field(name = "reminding at: " + str(datetime.datetime.fromtimestamp(x["next_time"].timestamp())),value = "url: "+ x["URL"],inline= False)
+        else:
+            embed.add_field(name = "reminding at: " + str(datetime.datetime.fromtimestamp(x["next_time"].timestamp())),value = "no url",inline= False)
         
+        ref.reference.delete()
+        refName = db.collection("{}".format(ctx.author)).document(u"reminds").collection(u"remindName").document(doc.id).get()
+        refName.reference.delete()
+        await ctx.send(embed = embed)
+    await ctx.send("Reminders deleted")
     
 reminder.start()
 bot.run(TOKEN,bot=True)

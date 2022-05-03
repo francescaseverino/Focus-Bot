@@ -7,9 +7,6 @@ FocusBot makes completing tasks easy and inevitable. Our bot takes the uncertain
 This bot will be made available through discord, a platform that many are aware of and use on a daily basis. Discord promotes multiparty discussions, to which the bot will be implemented to help organize tasks and projects. This bot should automatically be made aware of a user's current tasks and assignments through third party apis, however any other information such as verbally assigned assignments can be introduced to the bot through a chat interface.
 Using this bot solves the problem of not knowing what to do and when to do it, from a student’s perspective.
 
-
-
-
 ## Primary Features
 - update - this command prompts the bot to update the database (sourced by google’s firestore console) with canvas assignments and courses. This update also includes manually input assignments not related to canvas assignments.
 
@@ -44,7 +41,6 @@ Using this bot solves the problem of not knowing what to do and when to do it, f
 ***Insert pic of timer function***
 
 
-
 ## Reflections
 ***Development Process***
 Once the purpose of the bot and its functionality were decided, through discussion, the group was able to divide up the functionalities with the goal of working on the project using agile methodology. Even though the functions and tasks were separated by how much the user would interact with the bot, all tasks required each developer to interact with the bot as well as the firestore database. Progress on the bot was made while learning more about python functions, the discord api, and google’s firebase services. This situation allowed for all developers to increase their specific knowledge on the bot as well as overall knowledge of the resources used. Furthermore, the developers of this project were exposed to organizational practices such as scrum meetings and kanban boards to which were used to help the smooth progression of the project and collaboration efforts within the team. The use of these tools also promoted the organization of the project so much so that at any moment any team member could view the progress of the entire project as well as each individual member. This made finding issues with the project occur much earlier than usual.
@@ -54,10 +50,10 @@ Once the purpose of the bot and its functionality were decided, through discussi
 
 
 ## Limitations
-
+The greatest limit to note would be the lack of technical knowledege. Much time was spent, for each team member, learning how to use and apply the tools used to make the FocusBot. Time was also a limiting factor as the more time we spent learning how to use the materials, the less time we had to implement them into the bot. We also had less time to customize the bot, as functionality was prioritized over aesthetic.
 
 
 
 ## Future Work
-	If the team were to continue pursuing this project there are a number of features we would update and implement. A key concept that would be explored is the user interface. The point of this bot is to decrease the effort on the user’s end, thus, we would aim to minimize the interactions between the bot and the user while maintaining or even increasing the impact of the bot. 
-	With the time constraint and lack of technical knowledge during this project, our team’s goal had to be amended. Originally we intended this bot to work for multiple individuals at once, however, it only works for one individual at a time. We would hope to make it so this bot would be functional for groups and would help to organize and manage teamwork and group based assignments.
+If the team were to continue pursuing this project there are a number of features we would update and implement. A key concept that would be explored is the user interface. The point of this bot is to decrease the effort on the user’s end, thus, we would aim to minimize the interactions between the bot and the user while maintaining or even increasing the impact of the bot. 
+With the time constraint and lack of technical knowledge during this project, our team’s goal had to be amended. Originally we intended this bot to work for multiple individuals at once, however, it only works for one individual at a time. We would hope to make it so this bot would be functional for groups and would help to organize and manage teamwork and group based assignments.

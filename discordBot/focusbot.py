@@ -498,6 +498,8 @@ async def reminder():
 
 @bot.command()
 async def delete_reminders(ctx):
+
+    """Deletes current reminders"""
     docs = db.collection("{}".format(ctx.author)).document(u"reminds").collection(u"remindName").stream()
     for doc in docs:
         ref = db.collection("{}".format(ctx.author)).document(u"reminds").collection(doc.id).document(doc.id).get()

@@ -8,35 +8,37 @@ This bot will be made available through discord, a platform that many are aware 
 Using this bot solves the problem of not knowing what to do and when to do it, from a student’s perspective.
 
 ## Primary Features
-- update - this command prompts the bot to update the database (sourced by google’s firestore console) with canvas assignments and courses. This update also includes manually input assignments not related to canvas assignments.
+- **update** - this command prompts the bot to update the database (sourced by google’s firestore console) with canvas assignments and courses. This update also includes manually input assignments not related to canvas assignments.
 
-***Insert pic of update function***
+![update](https://user-images.githubusercontent.com/46319759/166458477-6222eaeb-4e3c-4756-9dca-dd41d56b9250.png)
 
-- get_assignment- this command prompts the bot to show all assignments due in the set time range (the default is set to seven days). The assignments listed are limited to a single course, chosen by the user. If the ‘other’ labeled course is chosen, assignments manually input and not related to canvas assignments will be listed.
+- **get_assignment**- this command prompts the bot to show all assignments due in the set time range (the default is set to seven days). The assignments listed are limited to a single course, chosen by the user. If the ‘other’ labeled course is chosen, assignments manually input and not related to canvas assignments will be listed.
 
-***Insert pic of get assignment function***
+![getassignment](https://user-images.githubusercontent.com/46319759/166458542-96ce1ff5-a654-4e8b-97c0-04ce791febd6.png)
 
-- get_All_assignment -  this command prompts the bot to show all assignments due in the set time range (the default is set to seven days). The assignments listed also include assignments manually input and not related to canvas assignments. Only uncompleted assignments along with their due date, title, and related course will be shown.
+- **clear** - this command prompts the bot to clear all assignments stored in the firestore console, including manually input assignments. This would be useful during course changes or a new semester, for example.
 
-***Insert pic of get all assignment function***
+![clear](https://user-images.githubusercontent.com/46319759/166458685-7c48a82e-f0b4-4e85-b8cc-2ae83cb13036.png)
 
-- clear - this command prompts the bot to clear all assignments stored in the firestore console, including manually input assignments. This would be useful during course changes or a new semester, for example.
+- **get_course_assignment** - show assignments due in set range(default 7days) from a course chosen by user
 
-***Insert pic of clear function***
+![getcourseassignment](https://user-images.githubusercontent.com/46319759/166458754-d25dc4b0-7b38-4fb2-bb4e-4d21e446e4dd.png)
+![getcourseassignment2](https://user-images.githubusercontent.com/46319759/166458725-66e21afb-df91-4044-b22e-e3681e0d1412.png)
 
-- get_course_assignment - show assignments due in set range(default 7days) from a course chosen by user
+- **set_getAssignmentRange** - this command sets a range for the bot to report assignments. The range is from one day to 365 days, and once set, the bot will only provide assignments within that range.
 
-***Insert pic of get course assignment function***
+![setassignmentrange](https://user-images.githubusercontent.com/46319759/166458791-78031258-0771-4111-b1d9-56c178a59b91.png)
 
-- set_getAssignmentRange - this command sets a range for the bot to report assignments. The range is from one day to 365 days, and once set, the bot will only provide assignments within that range.
+- **set_Assignment** - this command lets users inform the bot of assignments not listed in the users’ canvas courses. The bot will store the assignment in the firestore console alongside the stored canvas assignments and will report on user requests. Users also have the option to add assignments to existing canvas courses.
 
-***Insert pic of set assignment range function***
+![setassigncourse](https://user-images.githubusercontent.com/46319759/166459583-f527eaca-a178-418c-9d8c-b58efb80eeff.png)
+![setassigncourse2](https://user-images.githubusercontent.com/46319759/166459606-8b90bb57-b6ef-4e60-b21c-05730dcde363.png)
+![firebbasecourse](https://user-images.githubusercontent.com/46319759/166459619-ba846e9c-c35c-4aa8-9478-f45bee83ded4.png)
+![setassignnocourse](https://user-images.githubusercontent.com/46319759/166459630-b087951e-6935-4cf7-b60e-4d7ab45d0a1f.png)
+![firebasenocourse](https://user-images.githubusercontent.com/46319759/166459638-25e98a0d-e25e-446c-9f4f-6b4ec6303499.png)
 
-- set_Assignment - this command lets users inform the bot of assignments not listed in the users’ canvas courses. The bot will store the assignment in the firestore console alongside the stored canvas assignments and will report on user requests. Users also have the option to add assignments to existing canvas courses.
 
-***Insert pic of set assignment function***
-
-- set timer-
+- **set timer**-
 
 ***Insert pic of timer function***
 

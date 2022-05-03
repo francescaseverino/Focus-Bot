@@ -42,7 +42,7 @@ async def update(ctx):
 
         '''Updates the list of assignments from canvas'''
 
-        await ctx.send("Updating in progress. Please do not use any commands unitl finished.")
+        await ctx.send("Updating in progress! Please do not use any commands until finished. (Note: This will take a minute :/ )")
         courses = canvas.get_courses(enrollment_state="active")
 
         for course in courses:
@@ -162,17 +162,20 @@ async def clear(ctx):
     def check(msg):
         return msg.author == ctx.author and msg.channel == ctx.channel and msg.content.lower() in ["y", "n"]
 
-    await ctx.send(f"This will delete all data (update is recommended after). Would you like to clear?(Y/N)")
+    await ctx.send(f"This will delete all data (update is recommended after). Would you like to clear? (Y/N)")
 
 
     msg = await bot.wait_for("message")
     while not(check(msg)):
-        ctx.send(f"please input y or n")
+        ctx.send(f"Please input y or n: ")
         msg = await bot.wait_for("message")
 
     if msg.content.lower() == "n":
-        await ctx.send("clear was aborted")
+        await ctx.send("Clear command was aborted.")
         return
+    
+    await ctx.send("Clearing in progress! Please do not use any commands until finished. (Note: This will take a minute :/ )")
+    
     courses = db.collection("{}".format(ctx.author)).document("courses").collection("courseName").stream()
     
     for course in courses:
@@ -238,7 +241,7 @@ async def get_course_assignment(ctx):
            
     await ctx.send(embed = embed) 
 
-    await ctx.send("Done!") 
+    await ctx.send("Here is your assignment!") 
 
 
 
@@ -252,11 +255,11 @@ async def set_assignmentRange(ctx):
     def check(msg,ctx):
         return msg.author == ctx.author and msg.channel == ctx.channel and int(msg.content) > 0 and int(msg.content) < 365
     
-    embed=discord.Embed(title="please input a number(days) greater than 0 and less than 365",inline=False)
+    embed=discord.Embed(title="Please input a number(days) greater than 0 and less than 365.",inline=False)
     await ctx.send(embed = embed) 
     msg = await bot.wait_for("message")
     while not(check(msg,ctx)):
-        await ctx.send(f"please input a number(days) greater than 0 and less than 365")
+        await ctx.send(f"Please input a number(days) greater than 0 and less than 365.")
         msg = await bot.wait_for("message")
         
     msg = int(msg.content)
@@ -279,7 +282,7 @@ async def set_assignment(ctx):
     courseList = []
 
     courses = db.collection("{}".format(ctx.author)).document("courses").collection("courseName").stream()
-    embed=discord.Embed(title="is this assignment related to one of your canvas courses?",inline=False)
+    embed=discord.Embed(title="Is this assignment related to one of your canvas courses?",inline=False)
     
     await ctx.send(embed = embed)
     message = await bot.wait_for("message")
@@ -289,7 +292,7 @@ async def set_assignment(ctx):
     if message.content.lower()=="yes" or message.content.lower()== 'y':
         data={}
         assignmentName=""
-        embed=discord.Embed(title="which course?",inline=False)
+        embed=discord.Embed(title="Which course?",inline=False)
         
     
         '''creates course list for user to pick from '''
@@ -303,19 +306,19 @@ async def set_assignment(ctx):
 
         '''checking if user selection is contained in given list'''
         while not(check(message,ctx,courseID)):
-            await ctx.send(f"try picking a number from the list! (1 to " + courseID +")")
+            await ctx.send(f"Try picking a number from the list! (1 to " + courseID +")")
             message = await bot.wait_for("message")
 
         '''setting course'''
         courseSelection=int(message.content)-1
         
         '''setting assignment name'''
-        embed=discord.Embed(title="what should we call this assignment?",inline=False)
+        embed=discord.Embed(title="What should we call this assignment?",inline=False)
         await ctx.send(embed = embed)
         assignmentName=await bot.wait_for("message")
         
         ''' setting due date and submission status'''
-        embed=discord.Embed(title="what is the due date in 'MM/DD/YYY hh:mm' format?",inline=False)
+        embed=discord.Embed(title="What is the due date in 'MM/DD/YYY hh:mm' format?",inline=False)
         await ctx.send(embed = embed)
         message = await bot.wait_for("message")
         dt = datetime.datetime.strptime(message.content, r'%m/%d/%Y %H:%M')
@@ -331,12 +334,12 @@ async def set_assignment(ctx):
         data={}
         
         '''setting assignment name'''
-        embed=discord.Embed(title="what should we call this assignment?",inline=False)
+        embed=discord.Embed(title="What should we call this assignment?",inline=False)
         await ctx.send(embed = embed)
         assignmentName= await bot.wait_for("message")
         
         ''' setting due date and submission status'''
-        embed=discord.Embed(title="what is the due date in 'MM/DD/YYY hh:mm' format?",inline=False)
+        embed=discord.Embed(title="What is the due date in 'MM/DD/YYY hh:mm' format?",inline=False)
         await ctx.send(embed = embed)
         message = await bot.wait_for("message")
         dt = datetime.datetime.strptime(message.content, r'%m/%d/%Y %H:%M')
@@ -355,7 +358,7 @@ async def remind(ctx):
 
     courses = db.collection("{}".format(ctx.author)).document("courses").collection("courseName").stream()
 
-    embed=discord.Embed(title="These are assignments set to be reminded",inline=False)
+    embed=discord.Embed(title="These are assignments set to be reminded: ",inline=False)
     await ctx.send(embed = embed) 
 
     for course in courses:
@@ -396,7 +399,7 @@ async def remind(ctx):
            
                         await ctx.send(embed = embed) 
 
-    await ctx.send("Done!") 
+    await ctx.send("Reminders for Canvas Assignments above! Get working!") 
 
 
 
@@ -409,24 +412,24 @@ async def set_reminder(ctx):
     reminderName=""
 
     '''setting reminder name'''
-    embed=discord.Embed(title="what should we call this reminder?",inline=False)
+    embed=discord.Embed(title="What should we call this reminder?",inline=False)
     await ctx.send(embed = embed)
     reminderName= await bot.wait_for("message")
 
 
     ''' setting due date and submission status'''
-    embed=discord.Embed(title="what is the due date in 'MM/DD/YYYY hh:mm' format(Military time)?",inline=False)
+    embed=discord.Embed(title="What is the due date in 'MM/DD/YYYY hh:mm' format(Military time)?",inline=False)
     await ctx.send(embed = embed)
     msg = await bot.wait_for("message")
 
     """setting up url"""
-    embed = discord.Embed(title="do you have a url for the reminder? (Y/N)")
+    embed = discord.Embed(title="Do you have a url for the reminder? (Y/N)")
     await ctx.send(embed = embed)
     ans = await bot.wait_for("message")
     url = "None"
 
     if ans.content.lower() == "yes" or ans.content.lower() == "y":
-        embed = discord.Embed(title="Please provide the URL.")
+        embed = discord.Embed(title="Please provide the URL: ")
         await ctx.send(embed = embed)
         url = await bot.wait_for("message")
         
@@ -459,7 +462,7 @@ async def view_reminders(ctx):
         else:
             embed.add_field(name = "reminding at: " + str(datetime.datetime.fromtimestamp(x["next_time"].timestamp())),value = "no url",inline= False)
         await ctx.send(embed = embed)
-    await ctx.send("Done! Hope it helps!")
+    await ctx.send("Reminders above! Hope it helps!")
         
 
 @tasks.loop(seconds=5)

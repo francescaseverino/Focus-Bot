@@ -9,48 +9,69 @@ Using this bot solves the problem of not knowing what to do and when to do it, f
 
 ## Primary Features
 
-- **clear** - this command prompts the bot to clear all assignments stored in the firestore console, including manually input assignments. This would be useful during course changes or a new semester, for example.
+- **clear** - this command prompts the bot to clear all assignments stored in the firestore console, including manually input assignments. This would be useful during course changes or a new semester, for example. In the image below, it shows how all the data was cleared in the firebase and using the other commands to display this.
+
+  <img width="711" alt="Screen Shot 2022-05-09 at 15 29 44" src="https://user-images.githubusercontent.com/71108842/167483506-57951e1e-30ac-4cbe-8930-3fdc928bf11e.png">
 
 
 
-- **delete_reminders_** - this command prompts the bot to delete all reminders stored in the firebase console, both reminders from the manual input and canvas. This would be useful if the user was to reset the reminders and a fresh start.
+- **delete_reminders** - this command prompts the bot to delete all reminders stored in the firebase console, both reminders from the manual input and canvas. This would be useful if the user was to reset the reminders and a fresh start.
+
+  <img width="645" alt="Screen Shot 2022-05-09 at 15 19 11" src="https://user-images.githubusercontent.com/71108842/167481960-efcfc956-1e9e-45b8-9343-786fb3e60b34.png">
 
 
 
 - **get_assignment** - this command prompts the bot to show all assignments due in the set time range (the default is set to seven days). The assignments listed are limited to a single course, chosen by the user. If the ‘other’ labeled course is chosen, assignments manually input and not related to canvas assignments will be listed.
 
+  <img width="503" alt="Screen Shot 2022-05-09 at 15 14 55" src="https://user-images.githubusercontent.com/71108842/167481300-04832738-3263-4773-805c-c704906d8c19.png">
+
 
 
 - **get_course_assignment** - this command prompts the bot to show assignments due in set range (default 7days) from a course chosen by user. This helps keep the user from getting overwhelmed with all their assignments throughout the semester.
 
+  <img width="569" alt="Screen Shot 2022-05-09 at 15 16 04" src="https://user-images.githubusercontent.com/71108842/167481489-40b1f207-bd21-401f-a7e0-1901e0c2d59d.png">
+
+
 
 - **help** - this command prompts the bot to show a list of all the commands available on the bot.
+
+  <img width="893" alt="Screen Shot 2022-05-09 at 15 11 59" src="https://user-images.githubusercontent.com/71108842/167480764-04e3bcac-4721-45d4-8234-06936867ab14.png">
 
 
 
 - **remind** - this command prompts the bot to show the automate reminders for assignments on canvas. This allows there to be a separate list of reminders specifically for assignments on canvas.
 
+  <img width="676" alt="Screen Shot 2022-05-09 at 15 17 31" src="https://user-images.githubusercontent.com/71108842/167481719-68e510be-f79b-4f52-875c-5c6b563bc2ce.png">
 
 
 
-- **set_Assignment** - this command lets users inform the bot of assignments not listed in the users’ canvas courses. The bot will store the assignment in the firestore console alongside the stored canvas assignments and will report on user requests. Users also have the option to add assignments to existing canvas courses.
+- **set_assignment** - this command lets users inform the bot of assignments not listed in the users’ canvas courses. The bot will store the assignment in the firestore console alongside the stored canvas assignments and will report on user requests. Users also have the option to add assignments to existing canvas courses.
+
+  <img width="645" alt="Screen Shot 2022-05-09 at 15 24 33" src="https://user-images.githubusercontent.com/71108842/167482725-23bc4f68-2458-4b5a-a9da-0f28506ccb18.png">
 
 
 
 - **set_getAssignmentRange** - this command sets a range for the bot to report assignments. The range is from one day to 365 days, and once set, the bot will only provide assignments within that range.
 
+  <img width="677" alt="Screen Shot 2022-05-09 at 15 13 53" src="https://user-images.githubusercontent.com/71108842/167481116-5b230264-94f2-4cfe-bf2c-7cb72d318f81.png">
+
 
 
 - **set_reminder** - this command sets a reminder to a current assignment. While the canvas assignments have a pre-set reminder already, the user can still set a reminder for an assignment, even on canvas, for an earlier day or earlier then the time set beforehand.
 
+  <img width="685" alt="Screen Shot 2022-05-09 at 15 16 43" src="https://user-images.githubusercontent.com/71108842/167481604-f930a92f-b700-466e-aca5-b64e47c42284.png">
 
 
 
 - **update** - this command prompts the bot to update the database (sourced by google’s firestore console) with canvas assignments and courses. This update also includes manually input assignments not related to canvas assignments.
 
+  <img width="893" alt="Screen Shot 2022-05-09 at 15 12 46" src="https://user-images.githubusercontent.com/71108842/167480905-7c808b11-e6e5-456a-870b-75e9da98f7cc.png">
+
 
 
 - **view_reminders** - this command prompts the bot to display the list of all the current reminders, both manual and automate. This helps organizing the user to have the abiltiy to view all the reminders, grasping an overview of all assignments coming up for time mangement.
+
+  <img width="676" alt="Screen Shot 2022-05-09 at 15 18 23" src="https://user-images.githubusercontent.com/71108842/167481846-bdcec344-0a6f-4e4e-b5ad-796ad102a72f.png">
 
 
 

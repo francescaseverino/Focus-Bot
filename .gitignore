@@ -1,1 +1,4 @@
 .vscode
+serviceAccountKey.json
+config.py
+__pycache__

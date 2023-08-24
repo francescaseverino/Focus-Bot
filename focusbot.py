@@ -16,7 +16,7 @@ from datetime import datetime, timezone
 import datetime
 from discord.ext import tasks
 
-cred = credentials.Certificate("discordBot/serviceAccountKey.json")
+cred = credentials.Certificate("serviceAccountKey.json")
 firebase_admin.initialize_app(cred)
 
 db = firestore.client()
@@ -28,7 +28,8 @@ API_KEY = canvasToken
 
 canvas = Canvas(API_URL,API_KEY)
 
-bot = commands.Bot(command_prefix="f-")
+intents = discord.Intents.all()
+bot = commands.Bot(command_prefix="f-", intents=intents)
 
 @bot.event
 async def on_ready():
@@ -78,7 +79,7 @@ async def get_assignment(ctx):
     courses = db.collection("{}".format(ctx.author)).document("courses").collection("courseName").stream()
   
     for course in courses:
-        embed=discord.Embed(title=course.id,inline=False)
+        embed=discord.Embed(title=course.id)
         cnt = 1
         now= datetime.datetime.now()
         
@@ -90,22 +91,22 @@ async def get_assignment(ctx):
         for doc in docs:
             if cnt == 24:
                 await ctx.send(embed = embed)
-                embed=discord.Embed(title="Continued",inline=False)
+                embed=discord.Embed(title="Continued")
                 cnt = 0
             x = doc.to_dict()
         
-            embed.add_field(name = doc.id,value = x["dueDate"],inline= False)
+            embed.add_field(name = doc.id,value = x["dueDate"])
             '''if assignment was submited or not'''
             if x["Submissions"] == True:
                 if "URL" in x:
-                    embed.add_field(name = doc.id + " has been submitted",value = "url: "+ x["URL"],inline= False)
+                    embed.add_field(name = doc.id + " has been submitted",value = "url: "+ x["URL"])
                 else:
-                    embed.add_field(name = doc.id + " has been submitted",value = "no url",inline= False)
+                    embed.add_field(name = doc.id + " has been submitted",value = "no url")
             else:
                 if "URL" in x:
-                    embed.add_field(name = doc.id + " has not been submitted",value = "url: "+ x["URL"],inline= False)
+                    embed.add_field(name = doc.id + " has not been submitted",value = "url: "+ x["URL"])
                 else:
-                    embed.add_field(name = doc.id + " has not been submitted",value = "no url",inline= False)
+                    embed.add_field(name = doc.id + " has not been submitted",value = "no url")
             cnt += 1
         
         await ctx.send(embed = embed)   
@@ -207,10 +208,10 @@ async def get_course_assignment(ctx):
     lst = []
     courses = db.collection("{}".format(ctx.author)).document("courses").collection("courseName").stream()
 
-    embed=discord.Embed(title="Please select which course to see assignments from (enter a number >= 1) ",inline=False)
+    embed=discord.Embed(title="Please select which course to see assignments from (enter a number >= 1) ")
     arycnt = 1
     for course in courses:
-        embed.add_field(name = course.id,value = arycnt,inline= False)
+        embed.add_field(name = course.id,value = arycnt)
         lst.append(course.id)
         arycnt+=1
     
@@ -222,7 +223,7 @@ async def get_course_assignment(ctx):
         msg = await bot.wait_for("message")
         
     msg = int(msg.content)-1
-    embed=discord.Embed(title=lst[msg],inline=False)
+    embed=discord.Embed(title=lst[msg])
     
     cnt = 1
     now= datetime.datetime.now()
@@ -233,10 +234,10 @@ async def get_course_assignment(ctx):
     for doc in docs:
         if cnt == 24:
             await ctx.send(embed = embed)
-            embed=discord.Embed(title="Continued",inline=False)
+            embed=discord.Embed(title="Continued")
             cnt = 0
         x = doc.to_dict()
-        embed.add_field(name = doc.id,value = x["dueDate"],inline= False)
+        embed.add_field(name = doc.id,value = x["dueDate"])
         cnt += 1
            
     await ctx.send(embed = embed) 
@@ -255,7 +256,7 @@ async def set_assignmentRange(ctx):
     def check(msg,ctx):
         return msg.author == ctx.author and msg.channel == ctx.channel and int(msg.content) > 0 and int(msg.content) < 365
     
-    embed=discord.Embed(title="Please input a number(days) greater than 0 and less than 365.",inline=False)
+    embed=discord.Embed(title="Please input a number(days) greater than 0 and less than 365.")
     await ctx.send(embed = embed) 
     msg = await bot.wait_for("message")
     while not(check(msg,ctx)):
@@ -282,7 +283,7 @@ async def set_assignment(ctx):
     courseList = []
 
     courses = db.collection("{}".format(ctx.author)).document("courses").collection("courseName").stream()
-    embed=discord.Embed(title="Is this assignment related to one of your canvas courses?",inline=False)
+    embed=discord.Embed(title="Is this assignment related to one of your canvas courses?")
     
     await ctx.send(embed = embed)
     message = await bot.wait_for("message")
@@ -292,13 +293,13 @@ async def set_assignment(ctx):
     if message.content.lower()=="yes" or message.content.lower()== 'y':
         data={}
         assignmentName=""
-        embed=discord.Embed(title="Which course?",inline=False)
+        embed=discord.Embed(title="Which course?")
         
     
         '''creates course list for user to pick from '''
         courseID = 1
         for course in courses:
-            embed.add_field(name = course.id,value = courseID,inline= False)
+            embed.add_field(name = course.id,value = courseID)
             courseList.append(course.id)
             courseID+=1
         await ctx.send(embed = embed) 
@@ -313,12 +314,12 @@ async def set_assignment(ctx):
         courseSelection=int(message.content)-1
         
         '''setting assignment name'''
-        embed=discord.Embed(title="What should we call this assignment?",inline=False)
+        embed=discord.Embed(title="What should we call this assignment?")
         await ctx.send(embed = embed)
         assignmentName=await bot.wait_for("message")
         
         ''' setting due date and submission status'''
-        embed=discord.Embed(title="What is the due date in 'MM/DD/YYY hh:mm' format?",inline=False)
+        embed=discord.Embed(title="What is the due date in 'MM/DD/YYY hh:mm' format?")
         await ctx.send(embed = embed)
         message = await bot.wait_for("message")
         dt = datetime.datetime.strptime(message.content, r'%m/%d/%Y %H:%M')
@@ -334,12 +335,12 @@ async def set_assignment(ctx):
         data={}
         
         '''setting assignment name'''
-        embed=discord.Embed(title="What should we call this assignment?",inline=False)
+        embed=discord.Embed(title="What should we call this assignment?")
         await ctx.send(embed = embed)
         assignmentName= await bot.wait_for("message")
         
         ''' setting due date and submission status'''
-        embed=discord.Embed(title="What is the due date in 'MM/DD/YYY hh:mm' format?",inline=False)
+        embed=discord.Embed(title="What is the due date in 'MM/DD/YYY hh:mm' format?")
         await ctx.send(embed = embed)
         message = await bot.wait_for("message")
         dt = datetime.datetime.strptime(message.content, r'%m/%d/%Y %H:%M')
@@ -358,7 +359,7 @@ async def remind(ctx):
 
     courses = db.collection("{}".format(ctx.author)).document("courses").collection("courseName").stream()
 
-    embed=discord.Embed(title="These are assignments set to be reminded: ",inline=False)
+    embed=discord.Embed(title="These are assignments set to be reminded: ")
     await ctx.send(embed = embed) 
 
     for course in courses:
@@ -383,8 +384,8 @@ async def remind(ctx):
                     when = datetime.datetime.fromtimestamp(x["dueDate"].timestamp()) - datetime.timedelta(days=1)
                     
                     if now < when:
-                        embed=discord.Embed(title=course.id,inline=False)
-                        embed.add_field(name = doc.id,value = datetime.datetime.fromtimestamp(x["dueDate"].timestamp()),inline= False)
+                        embed=discord.Embed(title=course.id)
+                        embed.add_field(name = doc.id,value = datetime.datetime.fromtimestamp(x["dueDate"].timestamp()))
                         cs = db.collection("{}".format(ctx.author)).document("reminds").collection("remindName").document(doc.id)
                         if not(cs.get().exists):
                             cs.set({doc.id: True})
@@ -392,10 +393,10 @@ async def remind(ctx):
                         
                         if "URL" in x:
                             cs.set({'user_id': ctx.author.id, 'channel_id': ctx.channel.id, 'next_time': when, 'name': doc.id,"URL": x["URL"],'done': False})
-                            embed.add_field(name = doc.id + " has not been submitted",value = "url: "+ x["URL"],inline= False)
+                            embed.add_field(name = doc.id + " has not been submitted",value = "url: "+ x["URL"])
                         else:
                             cs.set({'user_id': ctx.author.id, 'channel_id': ctx.channel.id, 'next_time': when, 'name': doc.id,'done': False})
-                            embed.add_field(name = doc.id + " has not been submitted",value = "no url",inline= False)
+                            embed.add_field(name = doc.id + " has not been submitted",value = "no url")
            
                         await ctx.send(embed = embed) 
 
@@ -412,13 +413,13 @@ async def set_reminder(ctx):
     reminderName=""
 
     '''setting reminder name'''
-    embed=discord.Embed(title="What should we call this reminder?",inline=False)
+    embed=discord.Embed(title="What should we call this reminder?")
     await ctx.send(embed = embed)
     reminderName= await bot.wait_for("message")
 
 
     ''' setting due date and submission status'''
-    embed=discord.Embed(title="What is the due date in 'MM/DD/YYYY hh:mm' format(Military time)?",inline=False)
+    embed=discord.Embed(title="What is the due date in 'MM/DD/YYYY hh:mm' format(Military time)?")
     await ctx.send(embed = embed)
     msg = await bot.wait_for("message")
 
@@ -456,11 +457,11 @@ async def view_reminders(ctx):
     for doc in docs:
         ref = db.collection("{}".format(ctx.author)).document(u"reminds").collection(doc.id).document(doc.id).get()
         x = ref.to_dict()
-        embed=discord.Embed(title=x["name"] ,inline=False)
+        embed=discord.Embed(title=x["name"])
         if "URL" in x:
-            embed.add_field(name = "reminding at: " + str(datetime.datetime.fromtimestamp(x["next_time"].timestamp())),value = "url: "+ x["URL"],inline= False)
+            embed.add_field(name = "reminding at: " + str(datetime.datetime.fromtimestamp(x["next_time"].timestamp())),value = "url: "+ x["URL"])
         else:
-            embed.add_field(name = "reminding at: " + str(datetime.datetime.fromtimestamp(x["next_time"].timestamp())),value = "no url",inline= False)
+            embed.add_field(name = "reminding at: " + str(datetime.datetime.fromtimestamp(x["next_time"].timestamp())),value = "no url")
         await ctx.send(embed = embed)
     await ctx.send("Reminders above! Hope it helps!")
         
@@ -477,18 +478,18 @@ async def reminder():
             ref = db.collection(user.id).document(u"reminds").collection(doc.id).document(doc.id).get()
             x = ref.to_dict()
             if now > datetime.datetime.fromtimestamp(x["next_time"].timestamp()):
-                embed=discord.Embed(title="reminder",inline=False)
+                embed=discord.Embed(title="reminder")
                 channel = bot.get_channel(x["channel_id"])
                 if "URL" in x:
                     if "manual" in x:
-                        embed.add_field(name = "Reminder for " + doc.id,value = "url: "+ x["URL"],inline= False)
+                        embed.add_field(name = "Reminder for " + doc.id,value = "url: "+ x["URL"],)
                     else:
-                        embed.add_field(name = doc.id + " is due in one day!",value = "url: "+ x["URL"],inline= False)
+                        embed.add_field(name = doc.id + " is due in one day!",value = "url: "+ x["URL"],)
                 else:
                     if "manual" in x:
-                        embed.add_field(name = "Reminder for " + doc.id,value = "no url",inline= False)
+                        embed.add_field(name = "Reminder for " + doc.id,value = "no url")
                     else:
-                        embed.add_field(name = doc.id + " is due in one day!",value = "no url",inline= False)
+                        embed.add_field(name = doc.id + " is due in one day!",value = "no url")
                     
                 ref.reference.delete()
                 refName = db.collection(user.id).document(u"reminds").collection(u"remindName").document(doc.id).get()
@@ -504,11 +505,11 @@ async def delete_reminders(ctx):
     for doc in docs:
         ref = db.collection("{}".format(ctx.author)).document(u"reminds").collection(doc.id).document(doc.id).get()
         x = ref.to_dict()
-        embed=discord.Embed(title=x["name"] ,inline=False)
+        embed=discord.Embed(title=x["name"])
         if "URL" in x:
-            embed.add_field(name = "reminding at: " + str(datetime.datetime.fromtimestamp(x["next_time"].timestamp())),value = "url: "+ x["URL"],inline= False)
+            embed.add_field(name = "reminding at: " + str(datetime.datetime.fromtimestamp(x["next_time"].timestamp())),value = "url: "+ x["URL"])
         else:
-            embed.add_field(name = "reminding at: " + str(datetime.datetime.fromtimestamp(x["next_time"].timestamp())),value = "no url",inline= False)
+            embed.add_field(name = "reminding at: " + str(datetime.datetime.fromtimestamp(x["next_time"].timestamp())),value = "no url")
         
         ref.reference.delete()
         refName = db.collection("{}".format(ctx.author)).document(u"reminds").collection(u"remindName").document(doc.id).get()
@@ -516,5 +517,5 @@ async def delete_reminders(ctx):
         await ctx.send(embed = embed)
     await ctx.send("Reminders deleted")
     
-reminder.start()
-bot.run(TOKEN,bot=True)
+reminder()
+bot.run(TOKEN, )
